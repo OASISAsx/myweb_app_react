@@ -254,9 +254,9 @@ export default function TypewriterHero() {
             transition={{ delay: 1, duration: 1 }}
           >
             <motion.img
-              src="https://cdn.discordapp.com/attachments/954725603788066846/1352245970611470419/BFDB3FBE-4850-4D16-8EC5-2882541C060A_1.png?ex=694885f2&is=69473472&hm=66b48ddd80fdbe610e6143aea78244ee402e982d4ef4dcc8022dbdf658e975c8&"
+              src="/images/profile.jpg"
               alt="Profile"
-              className="rounded-full w-full h-full object-cover drop-shadow-2xl border-4 "
+              className="w-full h-full object-cover drop-shadow-2xl border-4 "
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
             />

@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import { a } from "motion/react-client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const greetingText = "สวัสดี, ผมชื่อ นันธวัช อินธิแสน";
 
@@ -28,7 +29,7 @@ const cardVariants: Variants = {
     y: 300,
   },
   onscreen: {
-    y: 50,
+    y: 20,
     rotate: -10,
     transition: {
       type: "spring",
@@ -88,58 +89,59 @@ const cardStyle: React.CSSProperties = {
 
 const food: [string, string, string, number, number][] = [
   [
-    "🚀",
+    "./images/next.png",
     "Next.js",
     "เชี่ยวชาญการสร้างเว็บที่เร็วและ SEO-friendly ด้วย App Router, Server Components และ Streaming",
     340,
     10,
   ],
   [
-    "⚡",
+    "./images/Ts.png",
     "TypeScript",
     "เขียนโค้ดที่ปลอดภัยและ maintainable ด้วย type safety เต็มรูปแบบ",
     20,
     60,
   ],
   [
-    "💻",
-    "React & Framer Motion",
-    "สร้าง UI สวยลื่นไหลด้วย animation ระดับเทพ",
+    "./images/vue.png",
+    "Vue.js",
+    "พัฒนาเว็บแอปด้วย Vue 3, Composition API และ Ecosystem ที่หลากหลาย",
     80,
     120,
   ],
   [
-    "🎨",
+    "./images/tw.png",
     "Tailwind CSS",
     "ออกแบบ responsive และสวยเร็วด้วย utility-first CSS",
     140,
     180,
   ],
   [
-    "🔥",
-    "Full-Stack Development",
-    "พัฒนาทั้ง Frontend และ Backend ได้ครบจบในตัวเดียว",
+    "./images/render.jpg",
+    "Render.com",
+    "ปรับใช้แอปพลิเคชันด้วย Render.com อย่างง่ายดายและรวดเร็ว\n    จัดการเวอร์ชันโค้ดและตั้งค่า CI/CD pipeline เพื่อการ deploy อัตโนมัติ",
     200,
     240,
   ],
   [
-    "🌟",
-    "Creative Coding",
-    "ชอบทดลองไอเดียใหม่ ๆ ด้วย animation และ interactive design",
-    260,
-    300,
-  ],
-  [
-    "🛠️",
-    "Modern Tooling",
-    "คุ้นเคยกับ Prisma, Supabase, Vercel, Git และ CI/CD",
+    "./images/github.png",
+    "Git & CI/CD",
+    "ใช้ Git และ CI/CD pipeline เพื่อการ อัพเดทงาน มีประสิทธิภาพและราบรื่น",
     300,
     340,
   ],
   [
-    "✨",
-    "UI/UX Focus",
-    "ใส่ใจรายละเอียดเพื่อให้ผู้ใช้รู้สึกว้าวทุกครั้งที่ใช้งาน",
+    "./images/Pinialogo.svg",
+    "Pinia & Vuex",
+    "จัดการสถานะแอปพลิเคชัน Vue.js อย่างมีประสิทธิภาพด้วย Pinia และ Vuex",
+    260,
+    300,
+  ],
+
+  [
+    "./images/ant.png",
+    "Ant Design",
+    "สร้าง UI ที่สวยงามและใช้งานง่ายด้วย Ant Design สำหรับ React และ Vue",
     20,
     80,
   ],
@@ -310,7 +312,12 @@ export default function TypewriterHero() {
                       }}
                     >
                       <span className="text-8xl md:text-9xl select-none">
-                        {emoji}
+                        <Image
+                          src={emoji}
+                          alt="Next.js"
+                          width={200}
+                          height={200}
+                        />
                       </span>
                     </motion.div>
                   </div>

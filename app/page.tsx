@@ -1,6 +1,7 @@
 // components/TypewriterHero.tsx
 "use client";
 
+import Grid from "@mui/material/Grid";
 import {
   motion,
   useMotionValue,
@@ -11,7 +12,7 @@ import {
 import { a } from "motion/react-client";
 import { useEffect, useState } from "react";
 
-const greetingText = "สวัสดี, ฉันคือ นันธวัช อินธิแสน";
+const greetingText = "สวัสดี, ผมชื่อ นันธวัช อินธิแสน";
 
 const rotatingWords = [
   "Full-Stack Developer",
@@ -20,9 +21,6 @@ const rotatingWords = [
   "Animation Lover",
   "Creative Coder",
 ];
-
-const reportList =
-  "• Full-Stack Developer: เชี่ยวชาญในการพัฒนาเว็บแอปพลิเคชันแบบครบวงจรด้วย Next.js และ React.js";
 
 // ============== Card Animation Styles ================
 const cardVariants: Variants = {
@@ -52,13 +50,14 @@ const containerStyle: React.CSSProperties = {
 const cardContainerStyle: React.CSSProperties = {
   overflow: "hidden",
   display: "flex",
-  width: 700,
+  width: "100%", // ✅ จาก 700 → auto
+  maxWidth: 700,
   justifyContent: "center",
   alignItems: "center",
   position: "relative",
-  paddingRight: 140,
+  paddingRight: 0, // ✅ เอาออก
   paddingTop: 20,
-  marginBottom: -120,
+  marginBottom: -80, // ลดนิดหน่อย
 };
 
 const splashStyle = (hueA: number, hueB: number): React.CSSProperties => ({
@@ -72,9 +71,10 @@ const splashStyle = (hueA: number, hueB: number): React.CSSProperties => ({
 });
 
 const cardStyle: React.CSSProperties = {
-  fontSize: 164,
-  width: 300,
-  height: 430,
+  fontSize: 140,
+  width: "min(280px, 90vw)", // ✅ mobile safe
+  height: "auto",
+  aspectRatio: "300 / 430", // รักษาสัดส่วน
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -211,11 +211,11 @@ export default function TypewriterHero() {
   return (
     <>
       {/* ===== HERO SECTION ===== */}
-      <section className="flex min-h-screen items-center justify-center bg-black px-6">
+      <section className="flex min-h-screen items-center justify-center  px-6">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-16 max-w-7xl w-full">
           {/* Text Part */}
           <div className="text-center lg:text-left space-y-8">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-light text-gray-400 tracking-wider">
+            <h1 className="text-2xl xs:text-2xl md:text-4xl lg:text-6xl font-light text-gray-400 tracking-wider">
               <motion.span className="inline-block">
                 <motion.span>{greetingDisplay}</motion.span>
                 {!isGreetingComplete && (
@@ -228,7 +228,7 @@ export default function TypewriterHero() {
               </motion.span>
             </h1>
 
-            <div className="text-4xl md:text-6xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+            <div className="text-2xl xs:text-2xl md:text-6xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
               <motion.span className="flex items-center justify-center lg:justify-start">
                 <motion.span>{wordDisplay}</motion.span>
                 <motion.span
@@ -254,17 +254,16 @@ export default function TypewriterHero() {
             <motion.img
               src="https://cdn.discordapp.com/attachments/954725603788066846/1352245970611470419/BFDB3FBE-4850-4D16-8EC5-2882541C060A_1.png?ex=694885f2&is=69473472&hm=66b48ddd80fdbe610e6143aea78244ee402e982d4ef4dcc8022dbdf658e975c8&"
               alt="Profile"
-              className="rounded-full w-full h-full object-cover drop-shadow-2xl border-4 border-purple-500/30"
+              className="rounded-full w-full h-full object-cover drop-shadow-2xl border-4 "
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
             />
           </motion.div>
         </div>
       </section>
-
       {/* ===== STACKED CARDS SECTION (ด้านล่าง) ===== */}
-      <section className="bg-gradient-to-b from-black to-gray-900 py-20">
-        <div className="text-center mb-16">
+      <section className=" py-10 px-6 pb-32">
+        <div className="text-center mb-2">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             My Skills & Passion
           </h2>
@@ -275,7 +274,7 @@ export default function TypewriterHero() {
           {food.map(([emoji, skillName, description, hueA, hueB], i) => (
             <motion.div
               key={i}
-              className="flex items-center justify-center relative"
+              className="flex flex-col items-center justify-center"
               initial="offscreen"
               whileInView="onscreen"
               viewport={{
@@ -290,56 +289,71 @@ export default function TypewriterHero() {
                 damping: 20,
               }}
             >
-              {/* ===== CARD (ซ้าย) ===== */}
-              <div style={cardContainerStyle}>
-                <div style={splashStyle(hueA, hueB)} />
-                <motion.div
-                  variants={cardVariants}
-                  style={cardStyle}
-                  className="card"
-                  whileHover={{
-                    rotate: -8,
-                    y: 40,
-                    scale: 1.05,
-                    transition: { type: "spring", stiffness: 300 },
-                  }}
-                >
-                  <span className="text-9xl select-none">{emoji}</span>
-                </motion.div>
-              </div>
+              <Grid
+                container
+                spacing={4}
+                alignItems="center"
+                justifyContent="center"
+              >
+                {/* ===== CARD (กลางจอเสมอ) ===== */}
+                <Grid size={{ xs: 12, md: 6 }} className="flex justify-center">
+                  <div style={cardContainerStyle}>
+                    <div style={splashStyle(hueA, hueB)} />
+                    <motion.div
+                      variants={cardVariants}
+                      style={cardStyle}
+                      whileHover={{
+                        rotate: -8,
+                        y: 40,
+                        scale: 1.05,
+                        transition: { type: "spring", stiffness: 300 },
+                      }}
+                    >
+                      <span className="text-8xl md:text-9xl select-none">
+                        {emoji}
+                      </span>
+                    </motion.div>
+                  </div>
+                </Grid>
 
-              {/* ===== TEXT นอก CARD (ขวา) ===== */}
+                {/* ===== TEXT (Desktop เท่านั้น) ===== */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <motion.div
+                    initial={{ opacity: 0, x: 80 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: false, amount: 0.5 }}
+                    transition={{
+                      delay: i * 0.15 + 0.3,
+                      duration: 0.8,
+                      ease: "easeOut",
+                    }}
+                    className="hidden md:block md:ml-12 max-w-lg"
+                  >
+                    <h3 className="text-4xl font-bold text-white mb-4 tracking-tight italic">
+                      {skillName}
+                    </h3>
+                    <p className="text-lg text-gray-300 leading-relaxed antialiased">
+                      {description}
+                    </p>
+                  </motion.div>
+                </Grid>
+              </Grid>
+
+              {/* ===== TEXT (Mobile ใต้ Card) ===== */}
               <motion.div
-                initial={{ opacity: 0, x: 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, amount: 0.5 }}
                 transition={{
-                  delay: i * 0.15 + 0.3, // ช้ากว่า card นิดนึง ให้ดู sequential
-                  duration: 0.8,
-                  ease: "easeOut",
+                  delay: i * 0.15 + 0.4,
+                  duration: 0.6,
                 }}
-                className="ml-12 max-w-lg hidden lg:block" // ซ่อนบนมือถือ ถ้าอยากให้แสดงบนมือถือด้วย ลบ hidden
+                className="mt-6 text-center md:hidden px-6 py-10"
               >
-                <h3 className="text-4xl font-bold text-white mb-4 tracking-tight">
+                <h3 className="text-4xl font-bold text-white mb-4 tracking-tight italic">
                   {skillName}
                 </h3>
-                <p className="text-lg text-gray-300 leading-relaxed">
-                  {description}
-                </p>
-              </motion.div>
-
-              {/* ===== TEXT บนมือถือ (ใต้ card) ===== */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ delay: i * 0.15 + 0.4, duration: 0.6 }}
-                className="mt-8 text-center lg:hidden px-6"
-              >
-                <h3 className="text-3xl font-bold text-white mb-3">
-                  {skillName}
-                </h3>
-                <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto">
+                <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto antialiased">
                   {description}
                 </p>
               </motion.div>
@@ -347,6 +361,32 @@ export default function TypewriterHero() {
           ))}
         </div>
       </section>
+      <motion.button
+        onClick={() => {
+          window.scrollBy({
+            top: window.innerHeight,
+            behavior: "smooth",
+          });
+        }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white opacity-70 hover:opacity-100"
+        animate={{ y: [0, 12, 0] }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-10 w-10"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </motion.button>
     </>
   );
 }

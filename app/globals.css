@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
+/* ===============================
+   Variables สำหรับ Light / Dark
+   =============================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light Theme */
+  --background: #f5f7fa; /* สีขาวอมฟ้าอ่อน */
+  --foreground: #171717; /* ข้อความดำเข้ม */
+  --accent-blue: #0ea5e9; /* สีฟ้าเท่สำหรับ glow / gradient */
+  --accent-darkblue: #1e3a8a; /* ฟ้าเข้มสำหรับ gradient */
+  --font-sans: "Geist Sans", Arial, Helvetica, sans-serif;
+  --font-mono: "Fira Code", monospace;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
+/* Dark Theme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a1a; /* ดำอมฟ้าเข้ม */
+    --foreground: #ededed; /* ข้อความขาวนวล */
+    --accent-blue: #3b82f6; /* ฟ้า Neon */
+    --accent-darkblue: #1e40af; /* ฟ้าเข้ม Deep */
   }
 }
 
+/* ===============================
+   Body Global
+   =============================== */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ===============================
+   ตัวอย่าง Gradient Background
+   =============================== */
+.bg-dark-blue-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--accent-darkblue),
+    var(--accent-blue)
+  );
+}
+
+/* ===============================
+   Text Glow / Neon Effect
+   =============================== */
+.text-glow {
+  text-shadow: 0 0 6px var(--accent-blue), 0 0 12px var(--accent-blue);
+}
+
+/* ===============================
+   Card / Section Glow Effect
+   =============================== */
+.card-glow {
+  background: #111827;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px var(--accent-blue) / 20,
+    0 0 40px var(--accent-blue) / 10 inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glow:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 0 30px var(--accent-blue) / 30,
+    0 0 50px var(--accent-blue) / 15 inset;
+}
+
+/* ===============================
+   Smooth Gradient Animation
+   =============================== */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-animated-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--accent-darkblue),
+    var(--accent-blue),
+    var(--accent-darkblue)
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 15s ease infinite;
 }

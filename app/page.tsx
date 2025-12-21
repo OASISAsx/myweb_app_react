@@ -277,7 +277,7 @@ export default function TypewriterHero() {
               className="flex flex-col items-center justify-center"
               initial="offscreen"
               whileInView="onscreen"
-              viewport={{ once: true, amount: 0.2 }} // เล่นครั้งเดียว
+              viewport={{ once: false, amount: 0.5, margin: "1px" }}
               transition={{
                 delay: i * 0.3,
                 type: "spring",

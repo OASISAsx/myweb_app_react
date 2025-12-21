@@ -277,17 +277,13 @@ export default function TypewriterHero() {
               className="flex flex-col items-center justify-center"
               initial="offscreen"
               whileInView="onscreen"
-              viewport={{
-                once: false,
-                amount: 0.5,
-                margin: "-100px",
-              }}
+              viewport={{ once: true, amount: 0.2 }} // เล่นครั้งเดียว
               transition={{
-                delay: i * 0.15,
+                delay: i * 0.3,
                 type: "spring",
                 stiffness: 80,
                 damping: 20,
-              }}
+              }} // sequential ชัดขึ้น
             >
               <Grid
                 container
@@ -295,7 +291,7 @@ export default function TypewriterHero() {
                 alignItems="center"
                 justifyContent="center"
               >
-                {/* ===== CARD (กลางจอเสมอ) ===== */}
+                {/* ===== CARD ===== */}
                 <Grid size={{ xs: 12, md: 6 }} className="flex justify-center">
                   <div style={cardContainerStyle}>
                     <div style={splashStyle(hueA, hueB)} />
@@ -303,10 +299,14 @@ export default function TypewriterHero() {
                       variants={cardVariants}
                       style={cardStyle}
                       whileHover={{
-                        rotate: -8,
-                        y: 40,
-                        scale: 1.05,
-                        transition: { type: "spring", stiffness: 300 },
+                        rotate: -5,
+                        y: -10,
+                        scale: 1.03,
+                        transition: {
+                          type: "spring",
+                          stiffness: 150,
+                          damping: 18,
+                        },
                       }}
                     >
                       <span className="text-8xl md:text-9xl select-none">
@@ -316,14 +316,14 @@ export default function TypewriterHero() {
                   </div>
                 </Grid>
 
-                {/* ===== TEXT (Desktop เท่านั้น) ===== */}
+                {/* ===== TEXT Desktop ===== */}
                 <Grid size={{ xs: 12, md: 6 }}>
                   <motion.div
                     initial={{ opacity: 0, x: 80 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: false, amount: 0.5 }}
+                    viewport={{ once: true, amount: 0.2 }} // same as card
                     transition={{
-                      delay: i * 0.15 + 0.3,
+                      delay: i * 0.3 + 0.2, // เลื่อน text หลัง card เล็กน้อย
                       duration: 0.8,
                       ease: "easeOut",
                     }}
@@ -339,27 +339,24 @@ export default function TypewriterHero() {
                 </Grid>
               </Grid>
 
-              {/* ===== TEXT (Mobile ใต้ Card) ===== */}
-              <Grid size={{ xs: 12, md: 6 }}>
-                <motion.div
-                  initial={{ opacity: 0, x: 80 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false, amount: 0.5 }}
-                  transition={{
-                    delay: i * 0.15 + 0.3,
-                    duration: 0.8,
-                    ease: "easeOut",
-                  }}
-                  className="mt-6 text-center md:hidden px-6 py-10"
-                >
-                  <h3 className="text-2xl xs:text-3xl md:text-2xl xl:text-5xl font-bold text-white mb-4 tracking-tight italic">
-                    {skillName}
-                  </h3>
-                  <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto antialiased">
-                    {description}
-                  </p>
-                </motion.div>
-              </Grid>
+              {/* ===== TEXT Mobile (ใต้ Card) ===== */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }} // เล่นครั้งเดียว
+                transition={{
+                  delay: i * 0.3 + 0.25, // เลื่อนหลัง card เล็กน้อย
+                  duration: 0.6,
+                }}
+                className="mt-6 text-center md:hidden px-6 py-10"
+              >
+                <h3 className="text-2xl xs:text-3xl md:text-2xl xl:text-5xl font-bold text-white mb-4 tracking-tight italic">
+                  {skillName}
+                </h3>
+                <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto antialiased">
+                  {description}
+                </p>
+              </motion.div>
             </motion.div>
           ))}
         </div>

@@ -340,23 +340,26 @@ export default function TypewriterHero() {
               </Grid>
 
               {/* ===== TEXT (Mobile ใต้ Card) ===== */}
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.5 }}
-                transition={{
-                  delay: i * 0.15 + 0.4,
-                  duration: 0.6,
-                }}
-                className="mt-6 text-center md:hidden px-6 py-10"
-              >
-                <h3 className="text-4xl font-bold text-white mb-4 tracking-tight italic">
-                  {skillName}
-                </h3>
-                <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto antialiased">
-                  {description}
-                </p>
-              </motion.div>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <motion.div
+                  initial={{ opacity: 0, x: 80 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false, amount: 0.5 }}
+                  transition={{
+                    delay: i * 0.15 + 0.3,
+                    duration: 0.8,
+                    ease: "easeOut",
+                  }}
+                  className="mt-6 text-center md:hidden px-6 py-10"
+                >
+                  <h3 className="text-2xl xs:text-3xl md:text-2xl xl:text-5xl font-bold text-white mb-4 tracking-tight italic">
+                    {skillName}
+                  </h3>
+                  <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto antialiased">
+                    {description}
+                  </p>
+                </motion.div>
+              </Grid>
             </motion.div>
           ))}
         </div>

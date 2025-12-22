@@ -21,13 +21,12 @@
 }
 
 /* Dark Theme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a1a; /* ดำอมฟ้าเข้ม */
-    --foreground: #ededed; /* ข้อความขาวนวล */
-    --accent-blue: #3b82f6; /* ฟ้า Neon */
-    --accent-darkblue: #1e40af; /* ฟ้าเข้ม Deep */
-  }
+
+:root {
+  --background: #0a0a1a; /* ดำอมฟ้าเข้ม */
+  --foreground: #ededed; /* ข้อความขาวนวล */
+  --accent-blue: #3b82f6; /* ฟ้า Neon */
+  --accent-darkblue: #1e40af; /* ฟ้าเข้ม Deep */
 }
 
 /* ===============================

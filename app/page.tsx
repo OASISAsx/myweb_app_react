@@ -12,6 +12,7 @@ import {
 import { a } from "motion/react-client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Snowfall from "react-snowfall";
 
 const greetingText = "สวัสดี, ผมชื่อ นันธวัช อินธิแสน";
 
@@ -213,7 +214,10 @@ export default function TypewriterHero() {
   return (
     <>
       {/* ===== HERO SECTION ===== */}
+
       <section className="flex min-h-screen items-center justify-center  px-6">
+        <Snowfall snowflakeCount={50} />
+
         <div className="flex flex-col lg:flex-row items-center justify-center gap-16 max-w-7xl w-full">
           {/* Text Part */}
           <div className="text-center lg:text-left space-y-8">
@@ -250,15 +254,28 @@ export default function TypewriterHero() {
           <motion.div
             className="relative w-80 h-80"
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1, duration: 1 }}
+            animate={{ opacity: 0.6, scale: 1 }}
+            transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
           >
             <motion.img
               src="/images/profile.jpg"
               alt="Profile"
-              className="w-full h-full object-cover drop-shadow-2xl border-4 "
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
+              className="w-full h-full object-cover rounded-2xl border-blue-400/10"
+              animate={{
+                rotate: [0, 2, -2, 0],
+                opacity: [0.35, 0.45, 0.35],
+                filter: ["blur(0.6px)", "blur(0.8px)", "blur(1.6px)"],
+                boxShadow: [
+                  "0 0 10px rgba(59,130,246,0.08)",
+                  "0 0 18px rgba(59,130,246,0.15)",
+                  "0 0 10px rgba(59,130,246,0.08)",
+                ],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 10,
+                ease: "easeInOut",
+              }}
             />
           </motion.div>
         </div>

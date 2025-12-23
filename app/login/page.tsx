@@ -1,13 +1,10 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 
 export default function SignIn() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -21,8 +18,8 @@ export default function SignIn() {
         password,
       });
 
-      if (!result?.error) {
-        router.replace(callbackUrl);
+      if (result?.error) {
+        console.error(result.error);
       } else {
         router.push("/");
       }
@@ -30,7 +27,6 @@ export default function SignIn() {
       console.log("error", error);
     }
   };
-
   useEffect(() => {
     const checkSession = async () => {
       const session = await getSession();

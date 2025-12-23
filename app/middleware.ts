@@ -9,19 +9,25 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // 1️⃣ ยังไม่ login → บังคับไป /login
-  if (!token && pathname !== "/login") {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // 🔒 protect /protected/*
+  if (pathname.startsWith("/")) {
+    // ❌ ยังไม่ login
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    } else if (token) {
+      console.log("User ID from middleware:", token.sub);
+      pathname.startsWith("/");
+    }
 
-  // 2️⃣ login แล้ว → ห้ามเข้า /login
-  if (token && pathname === "/login") {
-    return NextResponse.redirect(new URL("/", request.url));
+    // ❌ ไม่ใช่ admin
+    // if (token.role !== "admin") {
+    //   return NextResponse.redirect(new URL("/login", request.url));
+    // }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["//:path*"],
 };

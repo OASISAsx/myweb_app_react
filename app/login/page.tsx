@@ -44,7 +44,9 @@ export default function SignIn() {
         className="bg-white p-6 rounded-md shadow-md"
       >
         <div className="mb-4">
-          <label htmlFor="email">Email</label>
+          <label className="text-gray-800" htmlFor="email">
+            Email
+          </label>
           <input
             id="email"
             type="email"
@@ -55,7 +57,9 @@ export default function SignIn() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="password">Password</label>
+          <label className="text-gray-800" htmlFor="password">
+            Password
+          </label>
           <input
             id="password"
             type="password"

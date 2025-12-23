@@ -9,13 +9,14 @@ import {
   animate,
   Variants,
 } from "framer-motion";
-import { a } from "motion/react-client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Snowfall from "react-snowfall";
+import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 const greetingText = "สวัสดี, ผมชื่อ นันธวัช อินธิแสน";
-
 const rotatingWords = [
   "Full-Stack Developer",
   "UI/UX Designer",
@@ -150,6 +151,7 @@ const food: [string, string, string, number, number][] = [
 
 // ============== Main Component ================
 export default function TypewriterHero() {
+  const router = useRouter();
   // Typewriter logic (เหมือนเดิม)
   const greetingCount = useMotionValue(0);
   const greetingRounded = useTransform(greetingCount, Math.round);
@@ -170,6 +172,14 @@ export default function TypewriterHero() {
   });
 
   const [isGreetingComplete, setIsGreetingComplete] = useState(false);
+  const { data: session, status } = useSession();
+  useEffect(() => {
+    if (status === "authenticated") {
+      session?.user && console.log("User ID:", session.user.id);
+    } else if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     const controls = animate(greetingCount, greetingText.length, {
@@ -214,7 +224,12 @@ export default function TypewriterHero() {
   return (
     <>
       {/* ===== HERO SECTION ===== */}
-
+      <button
+        onClick={() => signOut({ callbackUrl: "/" })}
+        className="w-full bg-blue-500 text-white py-2 rounded"
+      >
+        Logout
+      </button>
       <section className="flex min-h-screen items-center justify-center  px-6">
         <Snowfall snowflakeCount={50} />
 

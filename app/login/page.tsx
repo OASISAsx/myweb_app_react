@@ -1,17 +1,81 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
+import { use, useEffect, useState } from "react";
+import { getSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
-    const [count ,setCount] = useState(0)
+export default function SignIn() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (!result?.error) {
+        router.replace(callbackUrl);
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+      if (session) {
+        router.push("/");
+      }
+    };
+    checkSession();
+  }, []);
 
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-3xl font-bold">Login</h1>
-      {count}
-      <button onClick={()=> setCount(count+1)}>add</button>
-    </main>
-
-  )
+    <div className="flex h-screen items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-md shadow-md"
+      >
+        <div className="mb-4">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full border border-gray-300 px-3 py-2 rounded" // Added border
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full border border-gray-300 px-3 py-2 rounded" // Added border
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded mb-4"
+        >
+          Sign In
+        </button>{" "}
+      </form>
+    </div>
+  );
 }

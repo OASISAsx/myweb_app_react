@@ -8,20 +8,23 @@ import {
   useTransform,
   animate,
   Variants,
+  useSpring,
+  AnimatePresence,
 } from "framer-motion";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Snowfall from "react-snowfall";
 import { useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const greetingText = "สวัสดี, ผมชื่อ นันธวัช อินธิแสน";
+// import { signOut, useSession } from "next-auth/react";
+
+const greetingText = "Hi, I'm Nanthawat Inthisaen";
 const rotatingWords = [
   "Full-Stack Developer",
-  "UI/UX Designer",
-  "Next.js Enthusiast",
-  "Animation Lover",
+  "Frontend Developer",
+  "Backend Developer",
   "Creative Coder",
 ];
 
@@ -54,7 +57,7 @@ const cardContainerStyle: React.CSSProperties = {
   overflow: "hidden",
   display: "flex",
   width: "100%", // ✅ จาก 700 → auto
-  maxWidth: 700,
+  maxWidth: 600,
   justifyContent: "center",
   alignItems: "center",
   position: "relative",
@@ -75,7 +78,7 @@ const splashStyle = (hueA: number, hueB: number): React.CSSProperties => ({
 
 const cardStyle: React.CSSProperties = {
   fontSize: 140,
-  width: "min(280px, 90vw)", // ✅ mobile safe
+  width: "min(280px, 100vw)", // ✅ mobile safe
   height: "auto",
   aspectRatio: "300 / 430", // รักษาสัดส่วน
   display: "flex",
@@ -94,7 +97,7 @@ const food: [string, string, string, number, number][] = [
     "./images/next.png",
     "Next.js",
     "เชี่ยวชาญการสร้างเว็บที่เร็วและ SEO-friendly ด้วย App Router, Server Components และ Streaming",
-    340,
+    0,
     10,
   ],
   [
@@ -112,19 +115,26 @@ const food: [string, string, string, number, number][] = [
     120,
   ],
   [
+    "./images/node.png",
+    "Node.js",
+    "สร้าง backend ที่มีประสิทธิภาพสูงด้วย Node.js และ Express.js ",
+    80,
+    120,
+  ],
+  [
     "./images/tw.png",
     "Tailwind CSS",
     "ออกแบบ responsive และสวยเร็วด้วย utility-first CSS",
     140,
     180,
   ],
-  [
-    "./images/render.jpg",
-    "Render.com",
-    "ปรับใช้แอปพลิเคชันด้วย Render.com อย่างง่ายดายและรวดเร็ว\n    จัดการเวอร์ชันโค้ดและตั้งค่า CI/CD pipeline เพื่อการ deploy อัตโนมัติ",
-    200,
-    240,
-  ],
+  // [
+  //   "./images/render.jpg",
+  //   "Render.com",
+  //   "ปรับใช้แอปพลิเคชันด้วย Render.com อย่างง่ายดายและรวดเร็ว\n    จัดการเวอร์ชันโค้ดและตั้งค่า CI/CD pipeline เพื่อการ deploy อัตโนมัติ",
+  //   200,
+  //   240,
+  // ],
   [
     "./images/github.png",
     "Git & CI/CD",
@@ -132,25 +142,49 @@ const food: [string, string, string, number, number][] = [
     300,
     340,
   ],
-  [
-    "./images/Pinialogo.svg",
-    "Pinia & Vuex",
-    "จัดการสถานะแอปพลิเคชัน Vue.js อย่างมีประสิทธิภาพด้วย Pinia และ Vuex",
-    260,
-    300,
-  ],
-
+  // [
+  //   "./images/Pinialogo.svg",
+  //   "Pinia & Vuex",
+  //   "จัดการสถานะแอปพลิเคชัน Vue.js อย่างมีประสิทธิภาพด้วย Pinia และ Vuex",
+  //   260,
+  //   300,
+  // ],
   [
     "./images/ant.png",
     "Ant Design",
     "สร้าง UI ที่สวยงามและใช้งานง่ายด้วย Ant Design สำหรับ React และ Vue",
-    20,
+    200,
     80,
+  ],
+  [
+    "./images/vuexys.webp",
+    "Vuexy",
+    "สร้าง UI ที่สวยงามและใช้งานง่ายด้วย Vuexy สำหรับ React และ Vue",
+    300,
+    300,
   ],
 ];
 
 // ============== Main Component ================
 export default function TypewriterHero() {
+  const [show, setShow] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+
+      // 👇 ถึงล่างสุด (เผื่อ 50px)
+      const isBottom = scrollTop + windowHeight >= docHeight - 50;
+      setShow(isBottom);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const router = useRouter();
   // Typewriter logic (เหมือนเดิม)
   const greetingCount = useMotionValue(0);
@@ -171,16 +205,45 @@ export default function TypewriterHero() {
     return latest <= text.length ? text.slice(0, latest) : text;
   });
 
-  const [isGreetingComplete, setIsGreetingComplete] = useState(false);
-  const { data: session, status } = useSession();
-  useEffect(() => {
-    if (status === "authenticated") {
-      session?.user && console.log("User ID:", session.user.id);
-    } else if (status === "unauthenticated") {
-      router.push("/login");
-    }
-  }, [router]);
+  const ref = useRef<HTMLButtonElement>(null);
 
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // spring นุ่ม ๆ
+  const springX = useSpring(x, { stiffness: 200, damping: 20 });
+  const springY = useSpring(y, { stiffness: 200, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+
+    const offsetX = e.clientX - rect.left - rect.width / 2;
+    const offsetY = e.clientY - rect.top - rect.height / 2;
+
+    // จำกัดระยะการเคลื่อนไหว (ยิ่งเล็กยิ่ง iOS)
+    x.set(offsetX * 0.15);
+    y.set(offsetY * 0.15);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  const [isGreetingComplete, setIsGreetingComplete] = useState(false);
+  // const { data: session, status } = useSession();
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     session?.user && console.log("User ID:", session.user.id);
+  //   } else if (status === "unauthenticated") {
+  //     router.push("/login");
+  //   }
+  // }, [router]);
+  const onClickMove = () => {
+    router.push("/about");
+  };
   useEffect(() => {
     const controls = animate(greetingCount, greetingText.length, {
       duration: greetingText.length * 0.08,
@@ -224,12 +287,12 @@ export default function TypewriterHero() {
   return (
     <>
       {/* ===== HERO SECTION ===== */}
-      <button
+      {/* <button
         onClick={() => signOut({ callbackUrl: "/" })}
         className="w-full bg-blue-500 text-white py-2 rounded"
       >
         Logout
-      </button>
+      </button> */}
       <section className="flex min-h-screen items-center justify-center  px-6">
         <Snowfall snowflakeCount={50} />
 
@@ -260,9 +323,7 @@ export default function TypewriterHero() {
               </motion.span>
             </div>
 
-            <p className="mt-12 text-xl text-gray-500">
-              Full-Stack Developer | Creative Coder
-            </p>
+            <p className="mt-12 text-xl text-gray-500">Wave | 23 age</p>
           </div>
 
           {/* Logo Part */}
@@ -304,101 +365,63 @@ export default function TypewriterHero() {
           <p className="text-gray-400 text-lg">สิ่งที่ฉันรักและเชี่ยวชาญ</p>
         </div>
 
-        <div style={containerStyle} className="relative">
-          {food.map(([emoji, skillName, description, hueA, hueB], i) => (
-            <motion.div
-              key={i}
-              className="flex flex-col items-center justify-center"
-              initial="offscreen"
-              whileInView="onscreen"
-              viewport={{ once: false, amount: 0.5, margin: "1px" }}
-              transition={{
-                delay: i * 0.3,
-                type: "spring",
-                stiffness: 80,
-                damping: 20,
-              }} // sequential ชัดขึ้น
-            >
-              <Grid
-                container
-                spacing={4}
-                alignItems="center"
-                justifyContent="center"
+        <section className="py-16 px-6 overflow-x-hidden ">
+          {food.map(
+            (
+              [emoji, skillName, description, hueA, hueB]: [
+                string,
+                string,
+                string,
+                number,
+                number
+              ],
+              i: number
+            ) => (
+              <div
+                key={i}
+                className="flex flex-col md:flex-row items-center justify-center gap-10 mb-28 "
               >
                 {/* ===== CARD ===== */}
-                <Grid size={{ xs: 12, md: 6 }} className="flex justify-center">
-                  <div style={cardContainerStyle}>
-                    <div style={splashStyle(hueA, hueB)} />
-                    <motion.div
-                      variants={cardVariants}
-                      style={cardStyle}
-                      whileHover={{
-                        rotate: -5,
-                        y: -10,
-                        scale: 1.03,
-                        transition: {
-                          type: "spring",
-                          stiffness: 150,
-                          damping: 18,
-                        },
-                      }}
-                    >
-                      <span className="text-8xl md:text-9xl select-none">
-                        <Image
-                          src={emoji}
-                          alt="Next.js"
-                          width={200}
-                          height={200}
-                        />
-                      </span>
-                    </motion.div>
-                  </div>
-                </Grid>
-
-                {/* ===== TEXT Desktop ===== */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <motion.div
-                    initial={{ opacity: 0, x: 80 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.2 }} // same as card
-                    transition={{
-                      delay: i * 0.3 + 0.2, // เลื่อน text หลัง card เล็กน้อย
-                      duration: 0.8,
-                      ease: "easeOut",
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.2, duration: 0.6 }}
+                  className="relative"
+                >
+                  <div
+                    className="absolute inset-0 blur-2xl opacity-40"
+                    style={{
+                      background: `linear-gradient(135deg, hsl(${hueA},100%,60%), hsl(${hueB},100%,60%))`,
                     }}
-                    className="hidden md:block md:ml-12 max-w-lg"
-                  >
-                    <h3 className="text-4xl font-bold text-white mb-4 tracking-tight italic">
-                      {skillName}
-                    </h3>
-                    <p className="text-lg text-gray-300 leading-relaxed antialiased">
-                      {description}
-                    </p>
-                  </motion.div>
-                </Grid>
-              </Grid>
+                  />
+                  <div className="relative bg-black/40 rounded-3xl p-10 w-50 h-48 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+                    <Image src={emoji} alt="" width={300} height={300} />
+                  </div>
+                </motion.div>
 
-              {/* ===== TEXT Mobile (ใต้ Card) ===== */}
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }} // เล่นครั้งเดียว
-                transition={{
-                  delay: i * 0.3 + 0.25, // เลื่อนหลัง card เล็กน้อย
-                  duration: 0.6,
-                }}
-                className="mt-6 text-center md:hidden px-6 py-10"
-              >
-                <h3 className="text-2xl xs:text-3xl md:text-2xl xl:text-5xl font-bold text-white mb-4 tracking-tight italic">
-                  {skillName}
-                </h3>
-                <p className="text-gray-300 text-base leading-relaxed max-w-md mx-auto antialiased">
-                  {description}
-                </p>
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
+                {/* ===== TEXT ===== */}
+                <motion.div
+                  initial={{ opacity: 0, x: 40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.2 + 0.15 }}
+                  className="
+    text-center md:text-left
+    w-full
+    max-w-xs sm:max-w-sm md:max-w-md md:pl-24
+    px-2 sm:px-0
+  "
+                >
+                  <h3 className="text-3xl font-bold text-white mb-4 italic">
+                    {skillName}
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">{description}</p>
+                </motion.div>
+              </div>
+            )
+          )}
+        </section>
       </section>
       <motion.button
         onClick={() => {
@@ -426,6 +449,36 @@ export default function TypewriterHero() {
           />
         </svg>
       </motion.button>
+      <AnimatePresence>
+        {show && (
+          <motion.div
+            className="fixed bottom-6 right-6 z-50"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          >
+            <motion.button
+              ref={ref}
+              onClick={onClickMove}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="px-10 py-4 rounded-2xl bg-white text-black font-semibold overflow-hidden shadow-lg
+                   xs:size-sm sm:size-md md:size-lg lg:size-lg"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <motion.span
+                style={{ x: springX, y: springY }}
+                className="flex items-center"
+              >
+                About Me
+                <ArrowForwardIosIcon className="ml-2 text-black" />
+              </motion.span>
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -29,20 +29,20 @@ const rotatingWords = [
 ];
 
 // ============== Card Animation Styles ================
-const cardVariants: Variants = {
-  offscreen: {
-    y: 300,
-  },
-  onscreen: {
-    y: 20,
-    rotate: -10,
-    transition: {
-      type: "spring",
-      bounce: 0.4,
-      duration: 0.8,
-    },
-  },
-};
+// const cardVariants: Variants = {
+//   offscreen: {
+//     y: 300,
+//   },
+//   onscreen: {
+//     y: 20,
+//     rotate: -10,
+//     transition: {
+//       type: "spring",
+//       bounce: 0.4,
+//       duration: 0.8,
+//     },
+//   },
+// };
 
 const hue = (h: number) => `hsl(${h}, 100%, 50%)`;
 
@@ -53,18 +53,18 @@ const containerStyle: React.CSSProperties = {
   position: "relative",
 };
 
-const cardContainerStyle: React.CSSProperties = {
-  overflow: "hidden",
-  display: "flex",
-  width: "100%", // ✅ จาก 700 → auto
-  maxWidth: 600,
-  justifyContent: "center",
-  alignItems: "center",
-  position: "relative",
-  paddingRight: 0, // ✅ เอาออก
-  paddingTop: 20,
-  marginBottom: -80, // ลดนิดหน่อย
-};
+// const cardContainerStyle: React.CSSProperties = {
+//   overflow: "hidden",
+//   display: "flex",
+//   width: "100%", // ✅ จาก 700 → auto
+//   maxWidth: 600,
+//   justifyContent: "center",
+//   alignItems: "center",
+//   position: "relative",
+//   paddingRight: 0, // ✅ เอาออก
+//   paddingTop: 20,
+//   marginBottom: -80, // ลดนิดหน่อย
+// };
 
 const splashStyle = (hueA: number, hueB: number): React.CSSProperties => ({
   position: "absolute",
@@ -76,21 +76,21 @@ const splashStyle = (hueA: number, hueB: number): React.CSSProperties => ({
   clipPath: `path("M 0 303.5 C 0 292.454 8.995 285.101 20 283.5 L 460 219.5 C 470.085 218.033 480 228.454 480 239.5 L 500 430 C 500 441.046 491.046 450 480 450 L 20 450 C 8.954 450 0 441.046 0 430 Z")`,
 });
 
-const cardStyle: React.CSSProperties = {
-  fontSize: 140,
-  width: "min(280px, 100vw)", // ✅ mobile safe
-  height: "auto",
-  aspectRatio: "300 / 430", // รักษาสัดส่วน
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  borderRadius: 20,
-  background: "#1a1a1a",
-  color: "#fff",
-  boxShadow:
-    "0 0 1px hsl(0deg 0% 100% / 0.1), 0 0 8px hsl(0deg 0% 100% / 0.1), 0 0 16px hsl(0deg 0% 100% / 0.1), inset 0 0 20px rgba(0,0,0,0.5)",
-  transformOrigin: "10% 60%",
-};
+// const cardStyle: React.CSSProperties = {
+//   fontSize: 140,
+//   width: "min(280px, 100vw)", // ✅ mobile safe
+//   height: "auto",
+//   aspectRatio: "300 / 430", // รักษาสัดส่วน
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+//   borderRadius: 20,
+//   background: "#1a1a1a",
+//   color: "#fff",
+//   boxShadow:
+//     "0 0 1px hsl(0deg 0% 100% / 0.1), 0 0 8px hsl(0deg 0% 100% / 0.1), 0 0 16px hsl(0deg 0% 100% / 0.1), inset 0 0 20px rgba(0,0,0,0.5)",
+//   transformOrigin: "10% 60%",
+// };
 
 const food: [string, string, string, number, number][] = [
   [
@@ -104,8 +104,8 @@ const food: [string, string, string, number, number][] = [
     "./images/Ts.png",
     "TypeScript",
     "เขียนโค้ดที่ปลอดภัยและ maintainable ด้วย type safety เต็มรูปแบบ",
-    20,
-    60,
+    140,
+    180,
   ],
   [
     "./images/vue.png",

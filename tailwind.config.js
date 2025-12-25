@@ -16,6 +16,15 @@ module.exports = {
         sans: ["Geist Sans", "Arial", "Helvetica", "sans-serif"],
         mono: ["Fira Code", "monospace"],
       },
+      theme: {
+        screens: {
+          sm: "640px",
+          md: "768px", // iPad portrait
+          ipad: "820px", // iPad Air / Pro
+          lg: "1024px", // iPad landscape
+          xl: "1280px",
+        },
+      },
     },
   },
   plugins: [],
